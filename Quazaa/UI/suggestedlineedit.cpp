@@ -32,7 +32,9 @@
 #include <QSettings>
 #include <QAbstractItemView>
 #include <QUrl>
+#if QT_VERSION >= 0x050000
 #include <QUrlQuery>
+#endif
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QXmlStreamReader>
@@ -87,7 +89,11 @@ CSuggestedLineEdit::~CSuggestedLineEdit()
 
 void CSuggestedLineEdit::load()
 {
+#if QT_VERSION >= 0x050000
 	QSettings m_qSettings(CQuazaaGlobals::INI_FILE(), QSettings::IniFormat);
+#else
+	QSettings m_qSettings(CQuazaaGlobals::INI_FILE(), QSettings::IniFormat);
+#endif
 
 	m_qSettings.beginGroup(objectName());
 	m_lRecent = m_qSettings.value("recent").toStringList();
@@ -97,7 +103,11 @@ void CSuggestedLineEdit::load()
 
 void CSuggestedLineEdit::save()
 {
+#if QT_VERSION >= 0x050000
 	QSettings m_qSettings(CQuazaaGlobals::INI_FILE(), QSettings::IniFormat);
+#else
+	QSettings m_qSettings(CQuazaaGlobals::INI_FILE(), QSettings::IniFormat);
+#endif
 
 	m_qSettings.beginGroup(objectName());
 	m_qSettings.setValue("recent", m_lRecent);
@@ -165,13 +175,18 @@ void CSuggestedLineEdit::getSuggestions()
 		}
 
 		QUrl url(QLatin1String("http://www.google.com/complete/search"));
+#if QT_VERSION >= 0x050000
 		QUrlQuery query;
 		query.setQuery(url.query());
 		query.addQueryItem(QUrl::toPercentEncoding(QLatin1String("q")),
 								QUrl::toPercentEncoding(text));
 		query.addQueryItem(QLatin1String("output"), QLatin1String("toolbar"));
 		url.setQuery(query);
-
+#else
+		url.addQueryItem(QUrl::toPercentEncoding(QLatin1String("q")),
+								QUrl::toPercentEncoding(text));
+		url.addQueryItem(QLatin1String("output"), QLatin1String("toolbar"));
+#endif
 		QNetworkRequest request(url);
 		request.setAttribute(QNetworkRequest::User, text);
 		QNetworkReply *reply = m_pNetworkAccessManager->get(request);

@@ -32,7 +32,16 @@
 #  include <objbase.h>
 #  include <qpixmapcache.h>
 #  include <qdir.h>
+#if QT_VERSION >= 0x050000
 #  include <windows.h>
+#endif
+#endif
+
+#if defined(Q_OS_WINCE) && QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <winbase.h>
+#include "qguifunctions_wince.h"
+extern bool qt_wince_is_high_dpi();
+extern bool qt_wince_is_pocket_pc();
 #endif
 
 #ifdef Q_OS_WIN
@@ -47,6 +56,7 @@
 #endif
 
 // Copied removed windows icon getters from Qt 4.8 QPixmap code for Qt 5
+#if QT_VERSION >= 0x050000
 #ifndef Q_OS_WINCE
 QImage fromWinHBITMAP(HDC hdc, HBITMAP bitmap, int w, int h)
 {
@@ -240,6 +250,7 @@ QPixmap fromWinHICON(HICON icon)
 	return QPixmap::fromImage(image);
 }
 #endif //ifndef Q_OS_WINCE
+#endif //QT_VERSION >= 0x050000
 
 // QFileIconProviderPrivate::getWinIcon copy modified to get icons for non-existing files
 QIcon getWinIcon(const QFileInfo &fileInfo)
@@ -295,10 +306,18 @@ QIcon getWinIcon(const QFileInfo &fileInfo)
 			}
 		}
 		if (pixmap.isNull()) {
+#if QT_VERSION >= 0x050000
 #ifndef Q_OS_WINCE
 			pixmap = fromWinHICON(info.hIcon);
 #else
 			pixmap = fromWinHICON(ImageList_GetIcon((HIMAGELIST) val, info.iIcon, ILD_NORMAL));
+#endif
+#else
+#ifndef Q_OS_WINCE
+			pixmap = QPixmap::fromWinHICON(info.hIcon);
+#else
+			pixmap = QPixmap::fromWinHICON(ImageList_GetIcon((HIMAGELIST) val, info.iIcon, ILD_NORMAL));
+#endif
 #endif
 			if (!pixmap.isNull()) {
 				retIcon.addPixmap(pixmap);
@@ -325,10 +344,18 @@ QIcon getWinIcon(const QFileInfo &fileInfo)
 			//using the unique icon index provided by windows save us from duplicate keys
 			key = QString::fromLatin1("qt_dir_%1").arg(info.iIcon);
 		}
+#if QT_VERSION >= 0x050000
 #ifndef Q_OS_WINCE
 		pixmap = fromWinHICON(info.hIcon);
 #else
 		pixmap = fromWinHICON(ImageList_GetIcon((HIMAGELIST) val, info.iIcon, ILD_NORMAL));
+#endif
+#else
+#ifndef Q_OS_WINCE
+		pixmap = QPixmap::fromWinHICON(info.hIcon);
+#else
+		pixmap = QPixmap::fromWinHICON(ImageList_GetIcon((HIMAGELIST) val, info.iIcon, ILD_NORMAL));
+#endif
 #endif
 		if (!pixmap.isNull()) {
 			retIcon.addPixmap(pixmap);

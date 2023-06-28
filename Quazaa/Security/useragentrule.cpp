@@ -27,7 +27,11 @@ void CUserAgentRule::setRegExp(bool bRegExp)
 
 	if ( m_bRegExp )
 	{
+#if QT_VERSION >= 0x050000
 		m_regularExpressionContent = QRegularExpression( m_sContent );
+#else
+		m_regExpContent = QRegExp( m_sContent );
+#endif
 	}
 }
 
@@ -37,7 +41,11 @@ bool CUserAgentRule::parseContent(const QString& sContent)
 
 	if ( m_bRegExp )
 	{
+#if QT_VERSION >= 0x050000
 		m_regularExpressionContent = QRegularExpression( m_sContent );
+#else
+		m_regExpContent = QRegExp( m_sContent );
+#endif
 	}
 
 	return true;
@@ -49,7 +57,11 @@ bool CUserAgentRule::match(const QString& sUserAgent) const
 
 	if( m_bRegExp )
 	{
+#if QT_VERSION >= 0x050000
 		return m_regularExpressionContent.match( sUserAgent ).hasMatch();
+#else
+		return m_regExpContent.exactMatch( sUserAgent );
+#endif
 	}
 	else
 	{
