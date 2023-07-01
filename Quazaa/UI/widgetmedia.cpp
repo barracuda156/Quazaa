@@ -31,10 +31,6 @@
 #include "debug_new.h"
 
 #include <QDebug>
-#include <QtMultimedia>
-#include <QDesktopWidget>
-
-#include <QFileDialog>
 
 // The Media Tab's Base Widget
 
@@ -43,24 +39,22 @@ CWidgetMedia::CWidgetMedia(QWidget* parent) :
 	ui(new Ui::CWidgetMedia)
 {
 	ui->setupUi(this);
+	m_tMediaControls = new QTimer(this);
+	m_tMediaControls->setSingleShot(true);
+	connect(m_tMediaControls, SIGNAL(timeout()), ui->frameMediaControls, SLOT(hide()));
 
+	m_tVolumeControl = new QTimer(this);
+	m_tVolumeControl->setSingleShot(true);
+	connect(m_tVolumeControl, SIGNAL(timeout()), ui->horizontalSliderVolume, SLOT(hide()));
+
+	seekSlider = new QSlider();
+	seekSlider->setOrientation(Qt::Horizontal);
+	volumeSlider = new QSlider();
+	volumeSlider->setOrientation(Qt::Horizontal);
+	volumeSlider->setMaximumWidth(100);
 	ui->splitterMedia->restoreState(quazaaSettings.WinMain.MediaSplitter);
-
-	player = new QMediaPlayer(this);
-	// owned by PlaylistModel
-	playlist = new QMediaPlaylist();
-	player->setPlaylist(playlist);
-	videoContainer = new VideoContainer(this);
-
-	player->setVideoOutput(videoContainer->videoWidget());
-
-	connect(videoContainer, SIGNAL(doubleClicked()), SLOT(toggleFullScreen()));
-	connect(videoContainer->mediaControls()->fullScreenButton(), SIGNAL(clicked()), SLOT(toggleFullScreen()));
-
-	ui->verticalLayoutMedia->addWidget(videoContainer);
-
-	connect(videoContainer->mediaControls()->openButton(), SIGNAL(clicked()), SLOT(openMedia()));
-
+	ui->frameMediaControls->hide();
+	ui->horizontalSliderVolume->hide();
 	setSkin();
 }
 
@@ -82,9 +76,48 @@ void CWidgetMedia::changeEvent(QEvent* e)
 	}
 }
 
+void CWidgetMedia::mouseMoveEvent(QMouseEvent *e)
+{
+	Q_UNUSED(e);
+
+	if(ui->frameMediaWindow->underMouse()) {
+		if(!ui->frameMediaControls->isVisible())
+			ui->frameMediaControls->show();
+
+		m_tMediaControls->start(10000);
+	}
+
+	if(ui->toolButtonMute->underMouse()) {
+		if(!ui->horizontalSliderVolume->isVisible())
+			ui->horizontalSliderVolume->show();
+
+		m_tVolumeControl->start(10000);
+	}
+}
+
 void CWidgetMedia::saveWidget()
 {
 	quazaaSettings.WinMain.MediaSplitter = ui->splitterMedia->saveState();
+}
+
+/*void WidgetMedia::on_actionMediaOpen_triggered()
+{
+	mediaPlayer->openFile();
+}
+
+void WidgetMedia::on_volumeSlider_valueChanged(int value)
+{
+	quazaaSettings.Media.Volume = value;
+}*/
+
+void CWidgetMedia::on_actionMediaRepeat_triggered(bool checked)
+{
+	quazaaSettings.Media.Repeat = checked;
+}
+
+void CWidgetMedia::on_actionMediaShuffle_triggered(bool checked)
+{
+	quazaaSettings.Media.Shuffle = checked;
 }
 
 void CWidgetMedia::on_splitterMedia_customContextMenuRequested(QPoint pos)
@@ -134,31 +167,9 @@ void CWidgetMedia::on_toolButtonMediaPlaylistTaskHeader_clicked()
 
 void CWidgetMedia::setSkin()
 {
+	seekSlider->setStyleSheet(skinSettings.seekSlider);
+	volumeSlider->setStyleSheet(skinSettings.volumeSlider);
 	ui->toolButtonMediaPlaylistTaskHeader->setStyleSheet(skinSettings.taskHeader);
 	ui->frameMediaPlaylistTask->setStyleSheet(skinSettings.sidebarBackground);
 	ui->listViewMediaPlaylist->setStyleSheet(skinSettings.listViews);
-}
-
-void CWidgetMedia::openMedia()
-{
-	QString file = QFileDialog::getOpenFileName(this, tr("Open File"));
-
-	QUrl url = QUrl::fromLocalFile(file);
-
-	playlist->addMedia(url);
-
-	player->play();
-}
-
-void CWidgetMedia::toggleFullScreen()
-{
-	if(!ui->videoContainerWidget->isFullScreen()) {
-		ui->videoContainerWidget->setParent(0);
-		ui->videoContainerWidget->showFullScreen();
-		videoContainer->mediaControls()->fullScreenButton()->setIcon(QIcon(":/Resource/Media/NoFullScreen.png"));
-	} else {
-		ui->videoContainerWidget->setParent(this);
-		ui->splitterMedia->insertWidget(0,ui->videoContainerWidget);
-		videoContainer->mediaControls()->fullScreenButton()->setIcon(QIcon(":/Resource/Media/FullScreen.png"));
-	}
 }

@@ -29,11 +29,10 @@ QT_VER_MAJ = $$member(QT_VERSION, 0)
 QT_VER_MIN = $$member(QT_VERSION, 1)
 
 greaterThan(QT_VER_MAJ, 4) {
-		QT +=	widgets \
+		QT += widgets \
+				gui \
 				multimedia \
-				multimediawidgets \
-				network \
-				xml
+				multimediawidgets
 }
 
 QT += network \
@@ -396,9 +395,7 @@ HEADERS += \
 		Models/securityfiltermodel.h \
 		UI/dialogimportsecurity.h \
 	UI/dialogmodifyrule.h \
-	UI/videowidget.h \
-	UI/mediacontrols.h \
-    UI/videocontainer.h
+    UI/mediaoverlay.h
 
 # Sources
 SOURCES += \
@@ -559,9 +556,7 @@ SOURCES += \
 		Models/securityfiltermodel.cpp \
 		UI/dialogimportsecurity.cpp \
 	UI/dialogmodifyrule.cpp \
-	UI/videowidget.cpp \
-	UI/mediacontrols.cpp \
-    UI/videocontainer.cpp
+    UI/mediaoverlay.cpp
 
 FORMS += \
 		UI/dialogabout.ui \
@@ -621,9 +616,7 @@ FORMS += \
 	UI/dialogirccolordialog.ui \
 	UI/wizardircconnection.ui \
 	UI/dialogimportsecurity.ui \
-	UI/dialogmodifyrule.ui \
-	UI/mediacontrols.ui \
-    UI/videocontainer.ui
+	UI/dialogmodifyrule.ui
 
 TRANSLATIONS = \
 		Language/quazaa_af.ts \
