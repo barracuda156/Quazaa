@@ -25,13 +25,15 @@
 #ifndef QUAZAAGLOBALS_H
 #define QUAZAAGLOBALS_H
 
-#include <QObject>
+#include <QString>
 
 #define LOG_QUERY_HANDLING 0
+#define LOG_MALFORMATTED_QUERIES 0
+#define LOG_ROUTED_PACKETS 0
+#define LOG_CONNECTIONS 0
 
-class CQuazaaGlobals : public QObject
+class QuazaaGlobals
 {
-		Q_OBJECT
 public:
 		static QString APPLICATION_NAME();
 		static QString APPLICATION_VERSION();

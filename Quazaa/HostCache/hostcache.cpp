@@ -331,7 +331,7 @@ bool CHostCache::save(const quint32 tNow)
 
 	bool bReturn;
 
-	quint32 nCount = common::securedSaveFile( CQuazaaGlobals::DATA_PATH(), "hostcache.dat", m_sMessage,
+	quint32 nCount = common::securedSaveFile( QuazaaGlobals::DATA_PATH(), "hostcache.dat", m_sMessage,
 											   this, &CHostCache::writeToFile );
 	if ( nCount )
 	{
@@ -355,7 +355,7 @@ void CHostCache::load()
 
 	ASSUME_LOCK( hostCache.m_pSection );
 
-	QFile file( CQuazaaGlobals::DATA_PATH() + "hostcache.dat" );
+	QFile file( QuazaaGlobals::DATA_PATH() + "hostcache.dat" );
 
 	if ( !file.exists() || !file.open( QIODevice::ReadOnly ) )
 		return;

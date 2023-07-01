@@ -90,9 +90,9 @@ CSuggestedLineEdit::~CSuggestedLineEdit()
 void CSuggestedLineEdit::load()
 {
 #if QT_VERSION >= 0x050000
-	QSettings m_qSettings(CQuazaaGlobals::INI_FILE(), QSettings::IniFormat);
+	QSettings m_qSettings(QuazaaGlobals::INI_FILE(), QSettings::IniFormat);
 #else
-	QSettings m_qSettings(CQuazaaGlobals::INI_FILE(), QSettings::IniFormat);
+	QSettings m_qSettings(QuazaaGlobals::INI_FILE(), QSettings::IniFormat);
 #endif
 
 	m_qSettings.beginGroup(objectName());
@@ -104,9 +104,9 @@ void CSuggestedLineEdit::load()
 void CSuggestedLineEdit::save()
 {
 #if QT_VERSION >= 0x050000
-	QSettings m_qSettings(CQuazaaGlobals::INI_FILE(), QSettings::IniFormat);
+	QSettings m_qSettings(QuazaaGlobals::INI_FILE(), QSettings::IniFormat);
 #else
-	QSettings m_qSettings(CQuazaaGlobals::INI_FILE(), QSettings::IniFormat);
+	QSettings m_qSettings(QuazaaGlobals::INI_FILE(), QSettings::IniFormat);
 #endif
 
 	m_qSettings.beginGroup(objectName());

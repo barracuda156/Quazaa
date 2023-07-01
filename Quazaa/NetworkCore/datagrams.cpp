@@ -764,8 +764,8 @@ void CDatagrams::onCRAWLR(CEndPoint& addr, G2Packet* pPacket)
 		pTmp->writePacket("LEAF", 0);
 	}
 	pTmp->writePacket("NA", ((Network.m_oAddress.protocol() == 0) ? 6 : 18))->writeHostAddress(&Network.m_oAddress);
-	pTmp->writePacket("CV", CQuazaaGlobals::USER_AGENT_STRING().toUtf8().size())->writeString(CQuazaaGlobals::USER_AGENT_STRING(), false);
-	pTmp->writePacket("V", 4)->writeString(CQuazaaGlobals::VENDOR_CODE(), false);;
+	pTmp->writePacket("CV", QuazaaGlobals::USER_AGENT_STRING().toUtf8().size())->writeString(QuazaaGlobals::USER_AGENT_STRING(), false);
+	pTmp->writePacket("V", 4)->writeString(QuazaaGlobals::VENDOR_CODE(), false);;
 	quint16 nLeaves = Neighbours.m_nLeavesConnectedG2;
 	pTmp->writePacket("HS", 2)->writeIntLE(nLeaves);
 	if(!quazaaSettings.Profile.GnutellaScreenName.isEmpty())

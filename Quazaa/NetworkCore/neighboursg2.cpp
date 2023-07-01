@@ -418,7 +418,7 @@ G2Packet* CNeighboursG2::createQueryAck(QUuid oGUID, bool bWithHubs, CNeighbour*
 	pPacket->writePacket("TS", 4)->writeIntLE<quint32>( common::getTNowUTC() );
 	pPacket->writePacket("FR", (Network.m_oAddress.protocol() == QAbstractSocket::IPv4Protocol ? 6 : 18))->writeHostAddress(&Network.m_oAddress);
 	pPacket->writePacket("RA", 4)->writeIntLE<quint32>(30 + 30 * m_nHubsConnectedG2);
-	pPacket->writePacket("V", 4)->writeString(CQuazaaGlobals::VENDOR_CODE(), false);
+	pPacket->writePacket("V", 4)->writeString(QuazaaGlobals::VENDOR_CODE(), false);
 
 	if(bDone)
 	{

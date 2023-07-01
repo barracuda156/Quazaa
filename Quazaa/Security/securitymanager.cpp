@@ -1230,7 +1230,7 @@ bool CSecurity::stop()
   */
 bool CSecurity::load()
 {
-	QString sPath = CQuazaaGlobals::DATA_PATH() + "security.dat";
+	QString sPath = QuazaaGlobals::DATA_PATH() + "security.dat";
 
 	if ( load( sPath ) )
 	{
@@ -1365,7 +1365,7 @@ bool CSecurity::save(bool bForceSaving) const
 
 	bool bReturn;
 
-	if ( !common::securedSaveFile( CQuazaaGlobals::DATA_PATH(), "security.dat", "[Security] ",
+	if ( !common::securedSaveFile( QuazaaGlobals::DATA_PATH(), "security.dat", "[Security] ",
 									this, &CSecurity::writeToFile ) )
 	{
 		bReturn = false;

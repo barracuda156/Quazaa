@@ -487,8 +487,8 @@ bool CDiscovery::asyncSyncSavingHelper()
 
 	postLog( LogSeverity::Notice, tr( "Saving Discovery Services Manager state." ) );
 
-	QString sPath          = CQuazaaGlobals::DATA_PATH() + "discovery.dat";
-	QString sBackupPath    = CQuazaaGlobals::DATA_PATH() + "discovery_backup.dat";
+	QString sPath          = QuazaaGlobals::DATA_PATH() + "discovery.dat";
+	QString sBackupPath    = QuazaaGlobals::DATA_PATH() + "discovery_backup.dat";
 	QString sTemporaryPath = sBackupPath + "_tmp";
 
 #if ENABLE_DISCOVERY_DEBUGGING
@@ -909,7 +909,7 @@ bool CDiscovery::doRemove(TServiceID nID)
 // Called only from within startup sequence
 void CDiscovery::load()
 {
-	QString sPath = CQuazaaGlobals::DATA_PATH() + "discovery.dat";
+	QString sPath = QuazaaGlobals::DATA_PATH() + "discovery.dat";
 
 #if ENABLE_DISCOVERY_DEBUGGING
 	postLog( LogSeverity::Debug, "Started loading services.", true );
@@ -925,7 +925,7 @@ void CDiscovery::load()
 	postLog( LogSeverity::Debug, "Failed primary attempt on loading services.", true );
 #endif
 
-		sPath = CQuazaaGlobals::DATA_PATH() + "discovery_backup.dat";
+		sPath = QuazaaGlobals::DATA_PATH() + "discovery_backup.dat";
 
 		postLog( LogSeverity::Warning,
 				 tr( "Failed to load discovery services from primary file. Switching to backup: " )
